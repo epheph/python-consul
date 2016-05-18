@@ -171,7 +171,7 @@ class Consul(object):
             scheme='http',
             consistency='default',
             dc=None,
-            verify=True):
+            validate_certs=True):
         """
         *token* is an optional `ACL token`_. If supplied it will be used by
         default for all requests made with this client session. It's still
@@ -186,7 +186,7 @@ class Consul(object):
         *dc* is the datacenter that this agent will communicate with.
         By default the datacenter of the host is used.
 
-        *verify* is whether to verify the SSL certificate for HTTPS requests
+        *validate_certs* is whether to verify the SSL certificate for HTTPS requests
         """
 
         # TODO: Status
@@ -196,10 +196,10 @@ class Consul(object):
         use_ssl = os.getenv('CONSUL_HTTP_SSL')
         if use_ssl is not None:
             scheme = 'https' if use_ssl == 'true' else 'http'
-        if os.getenv('CONSUL_HTTP_SSL_VERIFY') is not None:
-            verify = os.getenv('CONSUL_HTTP_SSL_VERIFY') == 'true'
+        if os.getenv('CONSUL_HTTP_SSL_validate_certs') is not None:
+            validate_certs = os.getenv('CONSUL_HTTP_SSL_VERIFY') == 'true'
 
-        self.http = self.connect(host, port, scheme, verify)
+        self.http = self.connect(host, port, scheme, validate_certs)
         self.token = os.getenv('CONSUL_HTTP_TOKEN', token)
         self.scheme = scheme
         self.dc = dc
